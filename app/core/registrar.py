@@ -1,10 +1,16 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from core.config import settings
+from app.database.db_mysql import create_tables
+from app.routes.index import route
+from app.core.config import settings
 
 
-async def register_middleware(app):
+def register_router(app: FastAPI):
+    app.include_router(route)
+
+
+def register_middleware(app):
     # 跨域
     if settings.MIDDLEWARE_CORS:
         app.add_middleware(
@@ -16,7 +22,7 @@ async def register_middleware(app):
         )
 
 
-async def register_app():
+def register_app():
     app = FastAPI(
         tille=settings.TITLE,
         version = settings.VERSION,
@@ -30,6 +36,15 @@ async def register_app():
     #     StaticFiles(directory=os.path.join(BASE_DIR, "statics")),
     #     name="static",
     # )
+
+    # 路由
+    register_router(app)
+
+
+    # 在应用启动时创建数据库表
+    @app.on_event("startup")
+    async def startup_event():
+        await create_tables()
 
     return app
 
