@@ -1,5 +1,8 @@
 import os
+import time
 from functools import lru_cache
+from pathlib import Path
+
 from pydantic.v1 import BaseSettings
 
 
@@ -34,6 +37,15 @@ class Settings(BaseSettings):
     MYSQL_ECHO: bool = False
     MYSQL_DATABASE: str = 'utf8mb4'
     MYSQL_CHARSET: str = 'fastdemo'
+
+    # logs
+    LOG_DIR: Path =  os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),'logs')
+    LOG_RETENTION: str = '5 days'
+    LOG_ROTATION: str = '12:00'
+    LOG_ENQUEUE: bool = True
+    LOG_FORMAT: str = "{time:YYYY-MM-DD HH:mm:ss} | {level} | {pid} | {thread.name}  {message}"
+
+
 
 
     class Config:

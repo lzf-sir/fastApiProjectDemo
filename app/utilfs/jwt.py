@@ -7,14 +7,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from app.core.config import settings
-from app.database.db_mysql import get_db
+from app.core.db import get_db
 from app.model.user import User
-from app.utilfs.errors import AuthorizationError
+from app.schema.response import ErrorResponse
+from app.utilfs.response.response_tool import ResponseTool
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=settings.TOKEN_URL_SWAGGER)
 
-def get_hash_password(password: str) -> str:
+async def get_hash_password(password: str) -> str:
     """
     使用 hash 算法加密密码
 
@@ -91,5 +92,5 @@ def superuser_verify(user: User):
     """
     is_superuser = user.is_superuser
     if not is_superuser:
-        raise AuthorizationError
+        raise "not superuser"
     return is_superuser

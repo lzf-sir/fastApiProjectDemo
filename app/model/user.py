@@ -1,7 +1,8 @@
 from datetime import datetime
 from typing import Optional
 from sqlalchemy import String, Column, Integer, Boolean, DateTime
-from app.database.db_mysql import get_uuid4_str
+
+from app.core.db import get_uuid4_str
 from app.model.base_model import BaseModel
 from app.utilfs.time_zone import timezone
 

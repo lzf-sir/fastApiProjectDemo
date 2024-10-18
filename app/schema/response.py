@@ -1,34 +1,22 @@
-from typing import Any
-
+from typing import Any, Optional
 from pydantic.v1 import BaseModel
 
 
 # OopCompanion:suppressRename
 
 
-class ResponseModel(BaseModel):
+class SuccessResponse(BaseModel):
     """
-    统一返回模型
-
-    .. tip::
-
-        如果你不想使用 ResponseBase 中的自定义编码器，可以使用此模型，返回数据将通过 fastapi 内部的编码器直接自动解析并返回
-
-    E.g. ::
-
-        @router.get('/test', response_model=ResponseModel)
-        def test():
-            return ResponseModel(data={'test': 'test'})
-
-
-        @router.get('/test')
-        def test() -> ResponseModel:
-            return ResponseModel(data={'test': 'test'})
-    """  # noqa: E501
-
-    # model_config = ConfigDict(json_encoders={datetime: lambda x: x.strftime(settings.DATETIME_FORMAT)})
-
+    成功的响应模型，包含数据。
+    """
     code: int = 200
-    msg: str = 'Success'
-    data: Any | None = None
+    msg: str = "Success"
+    data: Any
 
+class ErrorResponse(BaseModel):
+    """
+    错误的响应模型，包含错误信息。
+    """
+    code: int = 400
+    msg: str = "Error"
+    error: Optional[Any] = None

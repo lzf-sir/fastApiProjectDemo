@@ -11,10 +11,8 @@ class Auth(BaseModel):
     username: str
     password: str
 
-class CreateUserReq(BaseModel):
+class CreateUserReq(Auth):
     """创建用户请求模型"""
-    username: str
-    password: str
     email: EmailStr
 
 class UpdateUser(BaseModel):
